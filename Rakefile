@@ -21,7 +21,8 @@ def execute(command, stdout=nil)
 end
 
 def test(scheme, sdk)
-  execute "xcrun xcodebuild -sdk #{sdk} -workspace #{WORKSPACE} -scheme #{scheme} -configuration #{CONFIGURATION} test SYMROOT=build GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c && exit ${PIPESTATUS[0]}"
+  destination = sdk == 'macosx' ? '' : "-destination 'platform=iOS Simulator,name=iPhone 7,OS=10.0'"
+  execute "xcrun xcodebuild -sdk #{sdk} -workspace #{WORKSPACE} -scheme #{scheme} #{destination} -configuration #{CONFIGURATION} test SYMROOT=build GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES | xcpretty -c && exit ${PIPESTATUS[0]}"
 end
 
 def build(scheme, sdk, product)
